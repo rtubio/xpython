@@ -25,6 +25,16 @@ class TestUpdateJSON(unittest.TestCase):
         'd': 'D text'
     }
 
+    _OLD_LIST_JSON = [
+        {"a": "text a"}, {"b": "text b"}, {"d": "text d (OLD)"}
+    ]
+    _NEW_LIST_JSON = [
+        {"a": "text a"}, {"b": "text B (updated)"}, {"c": "text C (new)"}
+    ]
+    _EXPECTED_LIST_JSON = [
+        {"a": "text a"}, {"b": "text B (updated)"}, {"c": "text C (new)"}
+    ]
+
     def setUp(self):
 
         oldfp = tempfile.NamedTemporaryFile(delete=False)
@@ -36,6 +46,16 @@ class TestUpdateJSON(unittest.TestCase):
 
         xjson.dumps(self._oldpath, self._OLD_JSON)
         xjson.dumps(self._newpath, self._NEW_JSON)
+
+        oldfplist = tempfile.NamedTemporaryFile(delete=False)
+        newfplist = tempfile.NamedTemporaryFile(delete=False)
+        self._oldpathlist = oldfplist.name
+        self._newpathlist = newfplist.name
+        oldfplist.close()
+        newfplist.close()
+
+        xjson.dumps(self._oldpathlist, self._OLD_LIST_JSON)
+        xjson.dumps(self._newpathlist, self._NEW_LIST_JSON)
 
         self._backuppath = None
 
@@ -65,9 +85,7 @@ class TestUpdateJSON(unittest.TestCase):
 
     def test_update_cli(self):
 
-        argv = [
-            "--old", self._oldpath, "--new", self._newpath
-        ]
+        argv = ["--old", self._oldpath, "--new", self._newpath]
         update.UpdateJSON.create(argv)
         updated = xjson.loads(self._oldpath)
 
@@ -75,9 +93,7 @@ class TestUpdateJSON(unittest.TestCase):
 
     def test_update_and_backup_cli(self):
 
-        argv = [
-            "--old", self._oldpath, "--new", self._newpath, "--backup"
-        ]
+        argv = ["--old", self._oldpath, "--new", self._newpath, "--backup"]
         obj = update.UpdateJSON.create(argv)
 
         updated = xjson.loads(self._oldpath)
@@ -85,6 +101,13 @@ class TestUpdateJSON(unittest.TestCase):
 
         self.assertEqual(self._EXPECTED_JSON, updated)
         self.assertEqual(self._OLD_JSON, backup)
+
+    def test_update_list(self):
+
+        update.UpdateJSON(self._oldpathlist, self._newpathlist)
+        updated = xjson.loads(self._oldpathlist)
+
+        self.assertEqual(self._EXPECTED_LIST_JSON, updated)
 
 
 if __name__ == '__main__':

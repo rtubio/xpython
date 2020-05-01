@@ -1,6 +1,9 @@
 """
 This module contains a JSON processor for updating the contents of one JSON object,
 with the contents of the second one.
+
+NOTICE: "updated" method for dictionaries in Python 3 updates the contents of the lists
+        within the JSON objects, by replacing all the existing elements by the new ones.
 """
 
 import argparse, shutil, sys, typing
@@ -29,7 +32,8 @@ class UpdateJSON(logger.LoggingClass):
         backup_extension='.bak' : extension to be appended to the old file (DEFAULT)
         """
         super(UpdateJSON, self).__init__()
-        self._l.debug(f"Started, old = {oldpath}, new = {newpath}")
+        self._l.debug(f"Updating JSON files: old = {oldpath}, new = {newpath}")
+        self._is_list = False
 
         old = xjson.loads(oldpath, schemapath=schemapath)
         new = xjson.loads(newpath, schemapath=schemapath)
@@ -54,7 +58,6 @@ class UpdateJSON(logger.LoggingClass):
             old = old['list']
 
         xjson.dumps(oldpath, old)
-        self._l.debug(f"Ended, old = {oldpath}, new = {newpath}")
 
     @staticmethod
     def create(argv):
