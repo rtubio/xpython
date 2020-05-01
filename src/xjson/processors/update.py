@@ -3,7 +3,7 @@ This module contains a JSON processor for updating the contents of one JSON obje
 with the contents of the second one.
 """
 
-import argparse, shutil, sys
+import argparse, shutil, sys, typing
 
 from common import files, logger
 from xjson import xjson
@@ -34,6 +34,13 @@ class UpdateJSON(logger.LoggingClass):
         old = xjson.loads(oldpath, schemapath=schemapath)
         new = xjson.loads(newpath, schemapath=schemapath)
 
+        if isinstance(old, typing.List):
+            self._is_list = True
+
+        if self._is_list:
+            old = {"list": old}
+            new = {"list": new}
+
         old.update(new)
 
         if backup:
@@ -42,6 +49,9 @@ class UpdateJSON(logger.LoggingClass):
             else:
                 self.backuppath = backuppath
             shutil.copy(oldpath, self.backuppath)
+
+        if self._is_list:
+            old = old['list']
 
         xjson.dumps(oldpath, old)
         self._l.debug(f"Ended, old = {oldpath}, new = {newpath}")
