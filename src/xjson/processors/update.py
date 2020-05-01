@@ -29,7 +29,7 @@ class UpdateJSON(logger.LoggingClass):
         backup_extension='.bak' : extension to be appended to the old file (DEFAULT)
         """
         super(UpdateJSON, self).__init__()
-        self._l.debug(f"old = {oldpath}, new = {newpath}")
+        self._l.debug(f"Started, old = {oldpath}, new = {newpath}")
 
         old = xjson.loads(oldpath, schemapath=schemapath)
         new = xjson.loads(newpath, schemapath=schemapath)
@@ -44,7 +44,7 @@ class UpdateJSON(logger.LoggingClass):
             shutil.copy(oldpath, self.backuppath)
 
         xjson.dumps(oldpath, old)
-
+        self._l.debug(f"Ended, old = {oldpath}, new = {newpath}")
 
     @staticmethod
     def create(argv):
