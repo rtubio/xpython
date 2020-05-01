@@ -44,6 +44,8 @@ class UpdateJSON(logger.LoggingClass):
 
         xjson.dumps(oldpath, old)
 
+        self._l.debug(f"old = {oldpath}, new = {newpath}")
+
     @staticmethod
     def create(argv):
         # Basic class static factory method.

@@ -29,4 +29,4 @@ class LoggingClass(object):
     def __init__(self):
         """Main Constructor"""
         configure_logging()
-        self._log = logging.getLogger(self.__class__.__name__)
+        self._l = logging.getLogger(self.__class__.__name__)
