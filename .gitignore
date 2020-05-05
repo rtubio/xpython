@@ -1,5 +1,5 @@
 # Project specific files
-src/.xpython/
+xpython/.xpython/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
