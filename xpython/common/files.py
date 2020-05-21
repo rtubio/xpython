@@ -12,7 +12,7 @@ def is_valid_file(parser, arg):
         return arg
 
 
-def is_valid_dir(parser, arg):
+def is_writable_dir(arg):
     """
     This function simply checks whether the dir exists or not. In case it does
     not exists, it raises an exception.
