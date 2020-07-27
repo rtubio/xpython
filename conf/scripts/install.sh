@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source "conf/project.conf"
+source "conf/project.ini"
 
 virtualenv --python "$PYENV_PYTHON_VER" "$PYENV_D"
 

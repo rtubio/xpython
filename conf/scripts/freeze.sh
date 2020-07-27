@@ -7,7 +7,7 @@
 #
 # @author: rtpardavila@gmail.com
 
-source "conf/project.conf"
+source "conf/project.ini"
 
 source "$PYENV_ACTIVATE"
 pip freeze | grep -v 'pkg-resources' | tee "$PYENV_PKGS"
